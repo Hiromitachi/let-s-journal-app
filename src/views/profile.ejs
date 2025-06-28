@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #84c8e8;
+      color: #0e0d0d;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .profile-container {
+      max-width: 600px;
+      width: 100%;
+      background: #718ff1;
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: rgb(255, 255, 255);
+      margin-bottom: 40px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .profile-info {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #000000;
+    }
+    .profile-info p {
+      margin: 10px 0;
+    }
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: black;
+      background-color: #fcf239;
+      padding: 10px 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgb(78, 51, 255);
+      transition: background-color 0.3s ease;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      border: 2px solid #ffcb2f;
+    }
+    a:hover {
+      background-color: #ffffff;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <h1>User Profile</h1>
+    <% if (user) { %>
+      <div class="profile-info">
+        <p><strong>Username:</strong> <%= user.username %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+      </div>
+    <% } else { %>
+      <p>No user information available. Please log in.</p>
+    <% } %>
+    <a href="/">Go to Home</a>
+  </div>
+</body>
+</html>

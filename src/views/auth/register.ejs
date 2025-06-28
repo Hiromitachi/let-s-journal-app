@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title: 'Register - Journal App' }) %>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main class="auth-container">
+    <div class="auth-card">
+      <h1>Create Account</h1>
+      <p class="auth-subtitle">Start your personal journaling journey</p>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+      
+      <form action="/auth/register" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            required 
+            minlength="3"
+            maxlength="20"
+            value="<%= typeof values !== 'undefined' ? values.username : '' %>"
+            autocomplete="username"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            value="<%= typeof values !== 'undefined' ? values.email : '' %>"
+            autocomplete="email"
+          >
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              name="firstName"
+              value="<%= typeof values !== 'undefined' ? values.firstName : '' %>"
+              autocomplete="given-name"
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              name="lastName"
+              value="<%= typeof values !== 'undefined' ? values.lastName : '' %>"
+              autocomplete="family-name"
+            >
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required
+            minlength="6"
+            autocomplete="new-password"
+          >
+          <div class="form-hint">Password must be at least 6 characters</div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Already have an account? <a href="/auth/login">Login</a></p>
+      </div>
+    </div>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>

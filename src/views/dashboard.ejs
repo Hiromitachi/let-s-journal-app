@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head', { title: 'Dashboard - Journal App' }) %>
+<body>
+  <%- include('./partials/header') %>
+  <%- include('./partials/sidebar', { activeLink: 'dashboard' }) %>
+  
+  <main class="main-content">
+    <div class="dashboard-header" style="margin-bottom: 2rem;">
+      <h1 style="font-weight: 900; font-size: 2.5rem; color: #2c2c54;">HI, <%= (user.firstName || user.username).toUpperCase() %> !</h1>
+      <h3 style="font-weight: 700; color: #555;">WELCOME TO THE DASHBOARD</h3>
+    </div>
+    
+    <div class="dashboard-stats" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+      <div class="stat-card" style="flex: 1 1 150px;">
+        <div class="stat-icon">📝</div>
+        <div class="stat-label">TOTAL ENTRIES</div>
+        <div class="stat-value"><%= totalEntries %></div>
+      </div>
+      
+      <div class="stat-card" style="flex: 1 1 150px;">
+        <div class="stat-icon">📅</div>
+        <div class="stat-label">THIS MONTH</div>
+        <div class="stat-value">
+          <%= 
+            entriesByMonth.length > 0 ? entriesByMonth.reduce((sum, month) => sum + month.count, 0) : 0 
+          %>
+        </div>
+      </div>
+      
+      <div class="stat-card" style="flex: 1 1 150px;">
+        <div class="stat-icon">🔖</div>
+        <div class="stat-label">UNIQUE TAGS</div>
+        <div class="stat-value"><%= tagCounts.length %></div>
+      </div>
+      
+      <div class="stat-card" style="flex: 1 1 150px;">
+        <div class="stat-icon">📈</div>
+        <div class="stat-label">LATEST ENTRY</div>
+        <div class="stat-value">
+          <%= 
+            recentEntries.length > 0 ? 
+            (new Date(recentEntries[0].createdAt)).toLocaleDateString() : 
+            'No entries yet'
+          %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="dashboard-grid" style="display: flex; gap: 1.5rem; margin-top: 2rem;">
+      <div class="dashboard-card recent-entries" style="flex: 1 1 60%;">
+        <div class="card-header">
+          <h2>RECENT ENTRIES</h2>
+          <a href="/journal" class="view-all">View All</a>
+        </div>
+        <div class="entries-list">
+          <% if (recentEntries.length > 0) { %>
+            <% recentEntries.forEach(entry => { %>
+              <a href="/journal/<%= entry._id %>" class="entry-item">
+                <div class="entry-title"><%= entry.title %></div>
+                <div class="entry-meta">
+                  <span class="entry-date"><%= new Date(entry.createdAt).toLocaleDateString() %></span>
+                  <span class="entry-mood mood-<%= entry.mood %>"><%= entry.mood %></span>
+                </div>
+              </a>
+            <% }) %>
+          <% } else { %>
+            <div class="empty-state">
+              <p>Uh Oh no entries!</p>
+              <a href="/journal/create" class="btn btn-primary">write here +</a>
+            </div>
+          <% } %>
+        </div>
+      </div>
+      
+      <div class="dashboard-card mood-chart" style="flex: 1 1 35%;">
+        <div class="card-header">
+          <h2>MOOD DISTRIBUTION</h2>
+        </div>
+        <div class="chart-container">
+          <% if (moodCounts.length > 0) { %>
+            <div class="mood-bars">
+              <% 
+                const moods = ['happy', 'calm', 'neutral', 'anxious', 'sad', 'angry'];
+                moods.forEach(mood => {
+                  const moodData = moodCounts.find(m => m._id === mood);
+                  const count = moodData ? moodData.count : 0;
+                  const percentage = totalEntries > 0 ? Math.round((count / totalEntries) * 100) : 0;
+              %>
+                <div class="mood-bar-item">
+                  <div class="mood-label">
+                    <span class="mood-icon mood-<%= mood %>"></span>
+                    <%= mood.charAt(0).toUpperCase() + mood.slice(1) %>
+                  </div>
+<div class="mood-bar-container">
+                    <div class="mood-bar mood-<%= mood %>" style="width: '<%= percentage %>%';">
+                      <span class="mood-count"><%= count %></span>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="empty-state">
+              <p>add entries to track your mood</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <%- include('./partials/footer') %>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

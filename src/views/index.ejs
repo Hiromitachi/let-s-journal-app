@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head', { title: 'Journal App - Your Digital Diary' }) %>
+<body>
+  <%- include('./partials/header') %>
+  
+  <main class="landing">
+    <section class="hero">
+      <div class="container" style="position: relative;">
+        <div class="hero-content">
+          <h1>Capture Your Thoughts</h1>
+          <p>A private space to document your journey, reflect on your experiences, and track your growth.</p>
+          <div class="cta-buttons">
+            <a href="/auth/register" class="btn btn-primary">Get Started</a>
+            <a href="/auth/login" class="btn btn-secondary">Sign In</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="https://images.pexels.com/photos/6266316/pexels-photo-6266316.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Journal illustration">
+        </div>
+
+        <!-- Floating objects -->
+        <div class="floating-object" style="background-color: rgba(74, 144, 226, 0.3); border-radius: 50%;"></div>
+        <div class="floating-object" style="background-color: rgba(245, 166, 35, 0.3); border-radius: 50%;"></div>
+        <div class="floating-object" style="background-color: rgba(80, 227, 194, 0.3); border-radius: 50%;"></div>
+        <div class="floating-object" style="background-color: rgba(255, 209, 102, 0.3); border-radius: 50%;"></div>
+      </div>
+    </section>
+    
+    <section class="features">
+      <div class="container">
+        <h2>Why Journal With Us?</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon">📝</div>
+            <h3>Simple & Intuitive</h3>
+            <p>Our clean interface lets you focus on what matters - your thoughts.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🔒</div>
+            <h3>Private & Secure</h3>
+            <p>Your entries are protected and visible only to you.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📊</div>
+            <h3>Track Your Moods</h3>
+            <p>Gain insights into your emotional patterns over time.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🔍</div>
+            <h3>Search & Organize</h3>
+            <p>Find past entries with powerful search and tagging.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="testimonials">
+      <div class="container">
+        <h2>What Our Users Say</h2>
+        <div class="testimonial-slider">
+          <div class="testimonial">
+            <p>"This journal app has become an essential part of my daily routine. It's helped me process my thoughts and become more mindful."</p>
+            <div class="author">— Sarah K.</div>
+          </div>
+          <div class="testimonial">
+            <p>"The mood tracking feature has given me incredible insights into my emotional patterns. I've never been more self-aware."</p>
+            <div class="author">— Michael T.</div>
+          </div>
+          <div class="testimonial">
+            <p>"Simple, beautiful, and private. Everything I wanted in a journaling app."</p>
+            <div class="author">— Jamie L.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="cta">
+      <div class="container">
+        <h2>Start Your Journaling Journey Today</h2>
+        <p>Join thousands of users who have improved their wellbeing through regular reflection.</p>
+        <a href="/auth/register" class="btn btn-primary">Create Your Journal</a>
+      </div>
+    </section>
+  </main>
+  
+  <%- include('./partials/footer') %>
+  <script src="/js/landing.js"></script>
+</body>
+</html>

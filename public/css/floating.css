@@ -1,0 +1,58 @@
+/* Floating animation keyframes */
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Floating object base style */
+.floating-object {
+  position: absolute;
+  animation-name: floatUpDown;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: 4s;
+  opacity: 0.7;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Different animation durations and delays for variety */
+.floating-object:nth-child(1) {
+  animation-duration: 5s;
+  animation-delay: 0s;
+  width: 40px;
+  height: 40px;
+  top: 20%;
+  left: 10%;
+}
+
+.floating-object:nth-child(2) {
+  animation-duration: 6s;
+  animation-delay: 1s;
+  width: 30px;
+  height: 30px;
+  top: 40%;
+  left: 30%;
+}
+
+.floating-object:nth-child(3) {
+  animation-duration: 4.5s;
+  animation-delay: 0.5s;
+  width: 50px;
+  height: 50px;
+  top: 60%;
+  left: 70%;
+}
+
+.floating-object:nth-child(4) {
+  animation-duration: 5.5s;
+  animation-delay: 1.5s;
+  width: 35px;
+  height: 35px;
+  top: 30%;
+  left: 80%;
+}

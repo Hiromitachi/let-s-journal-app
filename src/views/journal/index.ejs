@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Journal Entries</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #5a6ea0;
+      margin: 0;
+      padding: 40px;
+      color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #f4a9d1;
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .journal-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .journal-list li {
+      background: white;
+      border-radius: 20px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .journal-list a {
+      text-decoration: none;
+      color: #000;
+      flex-grow: 1;
+    }
+    .journal-list form {
+      margin: 0;
+    }
+    .journal-list button {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+    .journal-list button:hover {
+      background-color: #c0392b;
+    }
+    .journal-list button svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    .create-entry {
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
+      padding: 15px 30px;
+      background-color: #f4a9d1;
+      color: black;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(244, 169, 209, 0.7);
+      transition: background-color 0.3s ease;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      border: 2px solid #f4a9d1;
+    }
+    .create-entry:hover {
+      background-color: #e07bbf;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="home-button" title="Home" style="position: absolute; top: 20px; right: 20px;">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="32" height="32" fill="#333">
+        <path d="M32 12l22 22h-6v18h-12v-12h-8v12h-12v-18h-6z"/>
+      </svg>
+    </a>
+    <h1>All Journal Entries</h1>
+    <% if (journals && journals.length > 0) { %>
+      <ul class="journal-list">
+        <% journals.forEach(function(journal) { %>
+          <li>
+            <a href="/journal/<%= journal._id %>"><%= journal.title %></a>
+            <form action="/journal/<%= journal._id %>?_method=DELETE" method="POST" style="display:inline;">
+              <button type="submit" aria-label="Delete Journal Entry" onclick="return confirm('Are you sure you want to delete this journal entry?');">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 9"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
+                </svg>
+              </button>
+            </form>
+          </li>
+        <% }); %>
+      </ul>
+    <% } else { %>
+      <p>No journal entries found.</p>
+    <% } %>
+    <a href="/journal/create" class="create-entry">
+      Create New Entry
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" class="plus-icon">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </a>
+  </div>
+  <style>
+    .plus-icon {
+      background-color: white;
+      border-radius: 50%;
+      padding: 2px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</body>
+</html>

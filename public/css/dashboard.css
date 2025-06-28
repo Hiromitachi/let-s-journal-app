@@ -1,0 +1,240 @@
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.main-content {
+  min-height: 100vh;
+  padding: 2rem;
+  margin-left: 270px;
+  margin-top: 20px;
+  background: linear-gradient(270deg, #f7567c, #fffae3, #fcfcfc, #f7567c);
+  background-size: 800% 800%;
+  animation: gradientShift 15s ease infinite;
+  border-radius: 15px 15px 15px 15px;
+  box-sizing: border-box;
+  color: var(--color-text-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Glass effect for stat cards and dashboard cards */
+.dashboard-stats .stat-card,
+.dashboard-grid .dashboard-card {
+  background: rgba(252, 252, 252, 0.25);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px 0 rgba(247, 86, 124, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 250, 227, 0.18);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  color: var(--color-text-dark);
+  transition: box-shadow 0.3s ease;
+}
+
+.dashboard-stats .stat-card:hover,
+.dashboard-grid .dashboard-card:hover {
+  box-shadow: 0 12px 40px 0 rgba(247, 86, 124, 0.6);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem;
+  gap: 10px;
+}
+
+.close-sidebar {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-dark);
+  margin-left: auto;
+}
+
+/* Stat card icon styling */
+.stat-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Stat value styling */
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--color-primary);
+}
+
+/* Stat label styling */
+.stat-label {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+/* Dashboard grid layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Card header styling */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+/* View all link styling */
+.view-all {
+  font-size: 0.9rem;
+  color: #f7567c;
+  text-decoration: none;
+  background: rgba(255, 250, 227, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+
+.view-all:hover {
+  background: rgba(255, 250, 227, 0.5);
+}
+
+/* Entry item styling */
+.entry-item {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(255, 250, 227, 0.15);
+  margin-bottom: 0.5rem;
+  color: var(--color-text-dark);
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.entry-item:hover {
+  background: rgba(255, 250, 227, 0.3);
+}
+
+/* Entry meta styling */
+.entry-meta {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center;
+  color: var(--color-text-light);
+  font-style: italic;
+  padding: 1rem;
+}
+
+/* Mood bar styling */
+.mood-bar-container {
+  background: rgba(255, 250, 227, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  height: 20px;
+  margin-top: 0.25rem;
+}
+
+.mood-bar {
+  height: 100%;
+  border-radius: 12px;
+  position: relative;
+  transition: width 0.5s ease;
+  background-color: var(--color-primary);
+}
+
+.mood-count {
+  position: absolute;
+  right: 8px;
+  top: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-inverse);
+  font-weight: 700;
+  text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+/* Mood icons colors */
+.mood-happy { background-color: #f7567c; }
+.mood-calm { background-color: #fffae3; }
+.mood-neutral { background-color: #fcfcfc; }
+.mood-anxious { background-color: #f7567c; }
+.mood-sad { background-color: #fffae3; }
+.mood-angry { background-color: #fcfcfc; }
+
+/* Activity graph bars */
+.activity-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.activity-bar {
+  width: 20px;
+  background: rgba(255, 250, 227, 0.25);
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  transition: height 0.5s ease;
+}
+
+.activity-count {
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-dark);
+  font-weight: 700;
+}
+
+.activity-label {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-dark);
+}
+
+.glass-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background: rgba(252, 252, 252, 0.25);
+  border-radius: 0 15px 15px 0;
+  box-shadow: 0 8px 32px 0 rgba(247, 86, 124, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 250, 227, 0.18);
+  color: var(--color-text-dark);
+  transition: box-shadow 0.3s ease;
+  z-index: 1000;
+}
+
+.site-footer {
+  margin-left: 270px;
+  transition: margin-left 0.3s ease;
+}

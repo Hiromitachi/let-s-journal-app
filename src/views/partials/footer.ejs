@@ -1,0 +1,39 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <a href="/">📓 Journal App</a>
+        <p>Your personal space for reflection and growth.</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-col">
+          <h3>Navigate</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <% if (user) { %>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/journal">My Journals</a></li>
+            <% } else { %>
+              <li><a href="/auth/login">Login</a></li>
+              <li><a href="/auth/register">Sign Up</a></li>
+            <% } %>
+          </ul>
+        </div>
+        
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; <%= new Date().getFullYear() %> Journal App. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script src="/js/main.js"></script>

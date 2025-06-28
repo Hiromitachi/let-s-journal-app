@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head', { title: 'Login - Journal App' }) %>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main class="auth-container">
+    <div class="auth-card">
+      <h1>Welcome Back</h1>
+      <p class="auth-subtitle">Sign in to continue your journaling journey</p>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+      
+      <form action="/auth/login" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            required 
+            value="<%= typeof values !== 'undefined' ? values.username : '' %>"
+            autocomplete="username"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required
+            autocomplete="current-password"
+          >
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Don't have an account? <a href="/auth/register">Register</a></p>
+      </div>
+    </div>
+  </main>
+  
+  <%- include('../partials/footer') %>
+</body>
+</html>
