@@ -1,6 +1,5 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 
-process.env.MONGODB_URI = 'mongodb://localhost:27017/journal-app';
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
