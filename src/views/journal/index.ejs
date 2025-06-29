@@ -1,162 +1,537 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Journal Entries</title>
+<html lang="en">
+<%- include('../partials/head', { title: 'My Journals - Journal App' }) %>
+<body>
+  <%- include('../partials/header') %>
+  <%- include('../partials/sidebar', { activeLink: 'journal' }) %>
+  
+  <main class="main-content">
+    <div class="journal-header" style="margin-bottom: 2rem;">
+      <h1 style="font-weight: 900; font-size: 2.5rem; color: #2c2c54;">MY JOURNAL ENTRIES 📚</h1>
+      <h3 style="font-weight: 700; color: #555;">ALL YOUR THOUGHTS IN ONE PLACE</h3>
+    </div>
+    
+    <!-- Search and Filter Section -->
+    <div class="search-filter-section">
+      <form method="GET" class="search-form">
+        <div class="search-container">
+          <input 
+            type="text" 
+            name="search" 
+            placeholder="🔍 Search your entries..." 
+            value="<%= search %>"
+            class="search-input"
+          >
+          <button type="submit" class="search-btn">Search</button>
+        </div>
+        
+        <div class="filter-container">
+          <select name="mood" class="filter-select">
+            <option value="">All Moods 😊</option>
+            <option value="laughing" <%= mood === 'laughing' ? 'selected' : '' %>>😂 Laughing</option>
+            <option value="happy" <%= mood === 'happy' ? 'selected' : '' %>>🙂 Happy</option>
+            <option value="neutral" <%= mood === 'neutral' ? 'selected' : '' %>>😐 Neutral</option>
+            <option value="sad" <%= mood === 'sad' ? 'selected' : '' %>>🙁 Sad</option>
+            <option value="anxious" <%= mood === 'anxious' ? 'selected' : '' %>>😰 Anxious</option>
+            <option value="calm" <%= mood === 'calm' ? 'selected' : '' %>>😌 Calm</option>
+            <option value="angry" <%= mood === 'angry' ? 'selected' : '' %>>😠 Angry</option>
+          </select>
+          
+          <input 
+            type="text" 
+            name="tag" 
+            placeholder="🏷️ Filter by tag..." 
+            value="<%= tag %>"
+            class="tag-input"
+          >
+        </div>
+      </form>
+    </div>
+    
+    <!-- Create New Entry Button -->
+    <div class="create-entry-section">
+      <a href="/journal/create" class="create-entry-btn">
+        <span class="btn-icon">✍️</span>
+        <span class="btn-text">Create New Entry</span>
+        <span class="btn-sparkle">✨</span>
+      </a>
+    </div>
+    
+    <!-- Journal Entries Grid -->
+    <div class="journal-grid">
+      <% if (journals && journals.length > 0) { %>
+        <% journals.forEach(function(journal, index) { %>
+          <div class="journal-card" style="animation-delay: <%= index * 0.1 %>s;">
+            <div class="card-header">
+              <div class="mood-indicator mood-<%= journal.mood %>">
+                <% 
+                  const moodEmojis = {
+                    laughing: '😂',
+                    happy: '🙂',
+                    neutral: '😐',
+                    sad: '🙁',
+                    anxious: '😰',
+                    calm: '😌',
+                    angry: '😠'
+                  };
+                %>
+                <%= moodEmojis[journal.mood] || '😐' %>
+              </div>
+              <div class="card-actions">
+                <form action="/journal/<%= journal._id %>?_method=DELETE" method="POST" style="display:inline;">
+                  <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this journal entry?');" aria-label="Delete Entry">
+                    🗑️
+                  </button>
+                </form>
+              </div>
+            </div>
+            
+            <div class="card-content">
+              <h3 class="entry-title">
+                <a href="/journal/<%= journal._id %>"><%= journal.title %></a>
+              </h3>
+              
+              <p class="entry-preview">
+                <%= journal.content.length > 150 ? journal.content.substring(0, 150) + '...' : journal.content %>
+              </p>
+              
+              <div class="entry-meta">
+                <span class="entry-date">
+                  📅 <%= new Date(journal.createdAt).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                  }) %>
+                </span>
+                
+                <% if (journal.tags && journal.tags.length > 0) { %>
+                  <div class="entry-tags">
+                    <% journal.tags.slice(0, 3).forEach(tag => { %>
+                      <span class="tag">#<%= tag %></span>
+                    <% }) %>
+                    <% if (journal.tags.length > 3) { %>
+                      <span class="tag-more">+<%= journal.tags.length - 3 %></span>
+                    <% } %>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+            
+            <div class="card-footer">
+              <a href="/journal/<%= journal._id %>" class="read-more-btn">
+                Read More 📖
+              </a>
+              <a href="/journal/<%= journal._id %>/edit" class="edit-btn">
+                Edit ✏️
+              </a>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h3>No entries found</h3>
+          <p>Start your journaling journey by creating your first entry!</p>
+          <a href="/journal/create" class="empty-cta-btn">
+            <span class="btn-icon">✍️</span>
+            Write Your First Entry
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </main>
+  
+  <%- include('../partials/footer') %>
+  
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #5a6ea0;
-      margin: 0;
-      padding: 40px;
-      color: #000;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    h1 {
-      text-align: center;
-      color: white;
-      margin-bottom: 40px;
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .container {
-      max-width: 600px;
-      width: 100%;
-      background: #f4a9d1;
-      padding: 20px 30px;
+    .search-filter-section {
+      background: rgba(252, 252, 252, 0.25);
       border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px 0 rgba(247, 86, 124, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 250, 227, 0.18);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .search-form {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 1rem;
     }
-    .journal-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    
+    .search-container {
       display: flex;
-      flex-direction: column;
-      gap: 15px;
+      gap: 1rem;
+      align-items: center;
     }
-    .journal-list li {
+    
+    .search-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid rgba(247, 86, 124, 0.3);
+      border-radius: 25px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #f7567c;
+      box-shadow: 0 0 0 3px rgba(247, 86, 124, 0.2);
       background: white;
+    }
+    
+    .search-btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #f7567c, #ff8cc9);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(247, 86, 124, 0.4);
+    }
+    
+    .filter-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .filter-select, .tag-input {
+      padding: 0.5rem 1rem;
+      border: 2px solid rgba(247, 86, 124, 0.3);
       border-radius: 20px;
-      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .filter-select:focus, .tag-input:focus {
+      outline: none;
+      border-color: #f7567c;
+      box-shadow: 0 0 0 3px rgba(247, 86, 124, 0.2);
+      background: white;
+    }
+    
+    .create-entry-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .create-entry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #f7567c, #ff8cc9);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 25px rgba(247, 86, 124, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .create-entry-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .create-entry-btn:hover::before {
+      left: 100%;
+    }
+    
+    .create-entry-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(247, 86, 124, 0.6);
+    }
+    
+    .btn-sparkle {
+      animation: sparkle 2s ease-in-out infinite;
+    }
+    
+    .journal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .journal-card {
+      background: rgba(252, 252, 252, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(247, 86, 124, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 250, 227, 0.18);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .journal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px 0 rgba(247, 86, 124, 0.6);
+    }
+    
+    .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-weight: bold;
-      font-size: 20px;
-      color: #000;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 1rem 1.5rem 0.5rem;
     }
-    .journal-list a {
-      text-decoration: none;
-      color: #000;
-      flex-grow: 1;
+    
+    .mood-indicator {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .journal-list form {
-      margin: 0;
-    }
-    .journal-list button {
-      background-color: #e74c3c;
+    
+    .mood-laughing { background: linear-gradient(135deg, #FFD700, #FFA500); }
+    .mood-happy { background: linear-gradient(135deg, #FFE135, #FFC107); }
+    .mood-neutral { background: linear-gradient(135deg, #E0E0E0, #BDBDBD); }
+    .mood-sad { background: linear-gradient(135deg, #87CEEB, #4682B4); }
+    .mood-anxious { background: linear-gradient(135deg, #FFB6C1, #FF69B4); }
+    .mood-calm { background: linear-gradient(135deg, #98FB98, #32CD32); }
+    .mood-angry { background: linear-gradient(135deg, #FF6B6B, #FF4444); }
+    
+    .delete-btn {
+      background: rgba(255, 107, 107, 0.2);
       border: none;
-      color: white;
+      border-radius: 50%;
       width: 40px;
       height: 40px;
-      border-radius: 50%;
       cursor: pointer;
-      font-size: 0;
-      padding: 0;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
       display: flex;
-      justify-content: center;
       align-items: center;
-      transition: background-color 0.3s ease;
+      justify-content: center;
     }
-    .journal-list button:hover {
-      background-color: #c0392b;
+    
+    .delete-btn:hover {
+      background: #ff6b6b;
+      transform: scale(1.1);
     }
-    .journal-list button svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
+    
+    .card-content {
+      padding: 0 1.5rem 1rem;
     }
-    .create-entry {
-      display: block;
-      width: fit-content;
-      margin: 0 auto;
-      padding: 15px 30px;
-      background-color: #f4a9d1;
-      color: black;
-      text-decoration: none;
+    
+    .entry-title {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
       font-weight: 700;
-      border-radius: 20px;
-      box-shadow: 0 6px 15px rgba(244, 169, 209, 0.7);
-      transition: background-color 0.3s ease;
-      font-size: 18px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    }
+    
+    .entry-title a {
+      color: #2c2c54;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .entry-title a:hover {
+      color: #f7567c;
+    }
+    
+    .entry-preview {
+      color: #666;
+      line-height: 1.5;
+      margin: 0 0 1rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .entry-meta {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      justify-content: center;
-      border: 2px solid #f4a9d1;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #777;
     }
-    .create-entry:hover {
-      background-color: #e07bbf;
+    
+    .entry-tags {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <a href="/" class="home-button" title="Home" style="position: absolute; top: 20px; right: 20px;">
-      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="32" height="32" fill="#333">
-        <path d="M32 12l22 22h-6v18h-12v-12h-8v12h-12v-18h-6z"/>
-      </svg>
-    </a>
-    <h1>All Journal Entries</h1>
-    <% if (journals && journals.length > 0) { %>
-      <ul class="journal-list">
-        <% journals.forEach(function(journal) { %>
-          <li>
-            <a href="/journal/<%= journal._id %>"><%= journal.title %></a>
-            <form action="/journal/<%= journal._id %>?_method=DELETE" method="POST" style="display:inline;">
-              <button type="submit" aria-label="Delete Journal Entry" onclick="return confirm('Are you sure you want to delete this journal entry?');">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 9"></path>
-                  <line x1="10" y1="11" x2="10" y2="17"></line>
-                  <line x1="14" y1="11" x2="14" y2="17"></line>
-                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path>
-                </svg>
-              </button>
-            </form>
-          </li>
-        <% }); %>
-      </ul>
-    <% } else { %>
-      <p>No journal entries found.</p>
-    <% } %>
-    <a href="/journal/create" class="create-entry">
-      Create New Entry
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" class="plus-icon">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-      </svg>
-    </a>
-  </div>
-  <style>
-    .plus-icon {
-      background-color: white;
-      border-radius: 50%;
-      padding: 2px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    
+    .tag {
+      background: rgba(247, 86, 124, 0.1);
+      color: #f7567c;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .tag-more {
+      background: rgba(247, 86, 124, 0.2);
+      color: #f7567c;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 250, 227, 0.2);
+    }
+    
+    .read-more-btn, .edit-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .read-more-btn {
+      background: linear-gradient(135deg, #f7567c, #ff8cc9);
+      color: white;
+    }
+    
+    .read-more-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(247, 86, 124, 0.4);
+    }
+    
+    .edit-btn {
+      background: rgba(255, 250, 227, 0.8);
+      color: #f7567c;
+      border: 1px solid rgba(247, 86, 124, 0.3);
+    }
+    
+    .edit-btn:hover {
+      background: rgba(247, 86, 124, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(252, 252, 252, 0.25);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(247, 86, 124, 0.37);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 250, 227, 0.18);
+    }
+    
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+    
+    .empty-state h3 {
+      color: #2c2c54;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .empty-state p {
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+    
+    .empty-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #f7567c, #ff8cc9);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    
+    .empty-cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(247, 86, 124, 0.6);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .journal-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .search-container {
+        flex-direction: column;
+      }
+      
+      .filter-container {
+        justify-content: center;
+      }
+      
+      .entry-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .card-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .journal-card {
+        margin: 0 -0.5rem;
+      }
+      
+      .search-filter-section {
+        margin: 0 -0.5rem 2rem;
+        border-radius: 15px;
+      }
+      
+      .create-entry-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
     }
   </style>
 </body>
